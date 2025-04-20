@@ -1,4 +1,4 @@
-const webhook= require("svix");
+const Webhook= require("svix");
 const User = require("../models/User.js");
 
 const clerkWebhooks = async(req,res) => {
