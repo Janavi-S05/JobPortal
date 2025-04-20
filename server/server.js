@@ -6,6 +6,7 @@ const env=require('dotenv/config')
 const connectDB = require('./config/db.js')
 const Sentry = require("@sentry/node");
 const clerkWebhooks = require('./controllers/webhooks.js')
+const User = require('./models/User.js');
 
 const app=express()
 
@@ -25,6 +26,16 @@ app.get('/debug-sentry',function mainHandler(req,res){
 });
 
 app.post('/webhooks',clerkWebhooks);
+
+app.get('/users', async (req, res) => {
+    try {
+        const users = await User.find();
+        res.json(users);
+    } catch (err) {
+        res.status(500).json({ error: 'Error fetching users' });
+    }
+});
+
 
 // Port
 const PORT = process.env.PORT || 5000

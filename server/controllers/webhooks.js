@@ -8,15 +8,14 @@ const clerkWebhooks = async(req,res) => {
             "svix-id" : req.headers["svix-id"],
             "svix-timestamp" : req.headers["svix-timestamp"],
             "svix-signature" : req.headers["svix-signature"]
-        })
+        });
 
         console.log("Incoming Headers:", headers);
         console.log("Incoming Payload:", payload);
         
         const {data,type} = req.body;
 
-        console.log("🔔 Webhook Type:", type);
-        
+        console.log("Webhook Type:", type);
         switch (type) {
             case 'user.created': {
                 const userData = {
@@ -27,7 +26,7 @@ const clerkWebhooks = async(req,res) => {
                     resume: ''
                 }
                 await User.create(userData);
-                console.log("✅ User created:", userData);
+                console.log("User created:", userData);
                 res.json({})
                 break;
             }
@@ -50,7 +49,7 @@ const clerkWebhooks = async(req,res) => {
             }
 
             default: 
-                console.log("ℹ️ Unhandled webhook type:", type);
+                console.log("Unhandled webhook type:", type);
                 res.status(204).end();
                 break;
             
