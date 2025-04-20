@@ -1,4 +1,4 @@
-const Webhook= require("svix").Webhook;
+const { Webhook } = require("svix");
 const User = require("../models/User.js");
 
 const clerkWebhooks = async(req,res) => {
@@ -10,7 +10,12 @@ const clerkWebhooks = async(req,res) => {
             "svix-signature" : req.headers["svix-signature"]
         })
 
+        console.log("Incoming Headers:", headers);
+        console.log("Incoming Payload:", payload);
+        
         const {data,type} = req.body;
+
+        console.log("🔔 Webhook Type:", type);
         
         switch (type) {
             case 'user.created': {
@@ -45,6 +50,8 @@ const clerkWebhooks = async(req,res) => {
             }
 
             default: 
+                console.log("ℹ️ Unhandled webhook type:", type);
+                res.status(204).end();
                 break;
             
         }
