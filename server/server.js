@@ -13,8 +13,13 @@ const app=express()
 connectDB()
 
 //Middlewares
-app.use(cors())
-app.use(express.json())
+app.use(cors());
+
+// 👇 Add raw body parser for Clerk webhooks
+app.use('/webhooks', express.raw({ type: 'application/json' }));
+
+// 👇 All other routes can use json body parser
+app.use(express.json());
 
 //Routes
 app.get('/',(req,res)=>{
