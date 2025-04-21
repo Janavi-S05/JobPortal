@@ -2,6 +2,10 @@ const { Webhook } = require("svix");
 const User = require("../models/User.js");
 
 const clerkWebhooks = async(req,res) => {
+
+    console.log("✅ Webhook hit!");
+    console.log("Headers:", req.headers);
+    console.log("Body (raw):", req.body);
     try{
         const whook=new Webhook(process.env.CLERK_WEBHOOK_SECRET)
         await whook.verify(req.body,{
