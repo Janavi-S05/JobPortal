@@ -7,19 +7,23 @@ const clerkWebhooks = async(req,res) => {
     console.log("Headers:", req.headers);
     console.log("Body (raw):", req.body);
     try{
-        const whook=new Webhook(process.env.CLERK_WEBHOOK_SECRET)
-        await whook.verify(req.body,{
-            "svix-id" : req.headers["svix-id"],
-            "svix-timestamp" : req.headers["svix-timestamp"],
-            "svix-signature" : req.headers["svix-signature"]
-        });
+        const payload = JSON.stringify(req.body);
+        const headers = {
+            "svix-id": req.headers["svix-id"],
+            "svix-timestamp": req.headers["svix-timestamp"],
+            "svix-signature": req.headers["svix-signature"]
+        };
 
-        console.log("Incoming Headers:", headers);
-        console.log("Incoming Payload:", payload);
-        
-        const {data,type} = req.body;
+        console.log("Received headers:", headers);
+        console.log("Received payload:", req.body);
 
-        console.log("Webhook Type:", type);
+        const whook = new Webhook(process.env.CLERK_WEBHOOK_SECRET);
+        whook.verify(payload, headers); // Verifies signature
+
+        const { data, type } = req.body;
+
+        console.log("Webhook event type:", type);
+
         switch (type) {
             case 'user.created': {
                 const userData = {

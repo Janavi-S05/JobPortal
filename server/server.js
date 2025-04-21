@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-const sentry=require('./config/instrument.js')
+require('dotenv/config')
+// const sentry=require('./config/instrument.js')
 const express= require('express')
 const cors= require('cors')
-const env=require('dotenv/config')
+// const env=require('dotenv/config')
 const connectDB = require('./config/db.js')
 const Sentry = require("@sentry/node");
 const clerkWebhooks = require('./controllers/webhooks.js')
@@ -14,12 +15,10 @@ connectDB()
 
 //Middlewares
 app.use(cors());
-
-// 👇 Add raw body parser for Clerk webhooks
-app.use('/webhooks', express.raw({ type: 'application/json' }));
-
 // 👇 All other routes can use json body parser
 app.use(express.json());
+// 👇 Add raw body parser for Clerk webhooks
+app.use('/webhooks', express.raw({ type: 'application/json' }));
 
 //Routes
 app.get('/',(req,res)=>{
