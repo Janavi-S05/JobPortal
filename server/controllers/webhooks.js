@@ -9,7 +9,7 @@ const clerkWebhooks = async (req, res) => {
     try {
         // Verify the webhook's signature
         const webhook = new Webhook(process.env.CLERK_WEBHOOK_SECRET); // Ensure you have this secret in your .env file
-        webhook.verify(req.body, req.headers); // Verifying signature and body
+        webhook.verify(JSON.stringify(req.body), req.headers); // Verifying signature and body
 
         const { data, type } = req.body;
 
