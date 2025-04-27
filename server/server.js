@@ -1,22 +1,28 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 require('dotenv/config')
-// const sentry=require('./config/instrument.js')
 const express= require('express')
 const cors= require('cors')
-// const env=require('dotenv/config')
 const connectDB = require('./config/db.js')
 const Sentry = require("@sentry/node");
 const clerkWebhooks = require('./controllers/webhooks.js')
-const User = require('./models/User.js');
 
+const companyRoutes = require("./routes/companyRoutes");
+const jobRoutes = require("./routes/jobRoutes");
+const userRoutes = require("./routes/userRoutes");
+
+const {clerkMiddleware} = require('@clerk/express')
+
+const connectCloudinary = require("./config/cloudinary");
 const app=express()
 
 connectDB()
+connectCloudinary()
 
 //Middlewares
 app.use(cors());
-// 👇 All other routes can use json body parser
 app.use(express.json());
+app.use(clerkMiddleware())
+
 // 👇 Add raw body parser for Clerk webhooks
 app.use('/webhooks', express.raw({ type: 'application/json' }));
 
@@ -29,17 +35,10 @@ app.get('/debug-sentry',function mainHandler(req,res){
     throw new Error("First Sentry Error");
 });
 
-app.post('/webhooks',clerkWebhooks);
-
-app.get('/users', async (req, res) => {
-    try {
-        const users = await User.find();
-        res.json(users);
-    } catch (err) {
-        res.status(500).json({ error: 'Error fetching users' });
-    }
-});
-
+app.post('/webhooks',clerkWebhooks)
+app.use('/api/company',companyRoutes)
+app.use('/api/jobs',jobRoutes)
+app.use('/api/user',userRoutes)
 
 // Port
 const PORT = process.env.PORT || 5000
