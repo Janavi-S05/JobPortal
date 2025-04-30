@@ -25,3 +25,6 @@ const jobApplicationSchema = new mongoose.Schema({
         required: true
     },
 })
+
+const JobApplication = mongoose.model('JobApplication',jobApplicationSchema)
+module.exports = JobApplication

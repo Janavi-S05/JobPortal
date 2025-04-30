@@ -12,21 +12,28 @@ import ManageJobs from './pages/ManageJobs'
 import ViewApplications from './pages/ViewApplications'
 import 'quill/dist/quill.snow.css'
 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css'
 function App() {
 
-  const { showRecruiterLogin } = useContext(AppContext)
+  const { showRecruiterLogin, companyToken } = useContext(AppContext)
   return (
     <div>
       {showRecruiterLogin && <RecruiterLogin />}
+      <ToastContainer />
       <Routes>
         <Route path='/' element={<Home />} />
         <Route path='/apply-job/:id' element={<ApplyJob />} />
         <Route path='/applications' element={<Applications />} />
         <Route path='/dashboard' element={<Dashboard />}>
-          {/* To render nested route use Outlet tag */}
-          <Route path='add-job' element={<AddJob />} />
-          <Route path='manage-jobs' element={<ManageJobs />} />
-          <Route path='view-applications' element={<ViewApplications />} />
+          {companyToken ? <>
+            {/* To render nested route use Outlet tag */}
+            <Route path='add-job' element={<AddJob />} />
+            <Route path='manage-jobs' element={<ManageJobs />} />
+            <Route path='view-applications' element={<ViewApplications />} />
+          </> : null
+          }
+
         </Route>
       </Routes>
     </div>
