@@ -4,18 +4,18 @@ A dynamic job portal application built with modern technologies to help users se
 # Technologies Used
 - Frontend: React.js
 - Backend: Node.js (with Express)
-Authentication: Clerk
-Deployment: Vercel
-Error Tracking: Sentry
-Image Management: Cloudinary
+- Authentication: Clerk
+- Deployment: Vercel
+- Error Tracking: Sentry
+- Image Management: Cloudinary
 
 # Features
-User Authentication: Secure sign-up and login features powered by Clerk.
-Job Search: Users can search for jobs by category, location, and type.
-Profile Management: Users can create and update their profile with resume and personal details.
-Job Application: Apply to job listings directly through the portal.
-Image Upload: Users can upload profile pictures or resumes using Cloudinary.
-Error Monitoring: Real-time error tracking with Sentry.
+- User Authentication: Secure sign-up and login features powered by Clerk.
+- Job Search: Users can search for jobs by category, location, and type.
+- Profile Management: Users can create and update their profile with resume and personal details.
+- Job Application: Apply to job listings directly through the portal.
+- Image Upload: Users can upload profile pictures or resumes using Cloudinary.
+- Error Monitoring: Real-time error tracking with Sentry.
 
 # Deployment
 This project is deployed using Vercel. The frontend is hosted and automatically updated with each commit to the repository.
