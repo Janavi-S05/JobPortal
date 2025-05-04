@@ -1,5 +1,5 @@
 # JobPortal
-A dynamic job portal application built with modern technologies to help users search for jobs, apply, and manage their profiles efficiently. This project integrates Clerk for authentication, Vercel for deployment, Sentry for error tracking, and Cloudinary for image management.
+A dynamic job portal application built with modern technologies to help users search for jobs, apply, and manage their profiles efficiently. This project integrates Clerk for authentication, Vercel for deployment, Sentry for error tracking and Cloudinary for image management.
 
 # Technologies Used
 - Frontend: React.js
