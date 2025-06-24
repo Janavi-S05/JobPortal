@@ -4,7 +4,7 @@ A dynamic job portal application built with modern technologies to help users se
 # Technologies Used
 - Frontend: React.js 
 - Backend: Node.js (with Express) 
-- Authentication: Clerk
+- Authentication: Clerk 
 - Deployment: Vercel
 - Error Tracking: Sentry
 - Image Management: Cloudinary 
