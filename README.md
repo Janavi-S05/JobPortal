@@ -7,7 +7,7 @@ A dynamic job portal application built with modern technologies to help users se
 - Authentication: Clerk
 - Deployment: Vercel
 - Error Tracking: Sentry
-- Image Management: Cloudinary
+- Image Management: Cloudinary 
 
 # Features 
 - User Authentication: Secure sign-up and login features powered by Clerk.
