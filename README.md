@@ -9,7 +9,7 @@ A dynamic job portal application built with modern technologies to help users se
 - Error Tracking: Sentry
 - Image Management: Cloudinary
 
-# Features
+# Features 
 - User Authentication: Secure sign-up and login features powered by Clerk.
 - Job Search: Users can search for jobs by category, location, and type.
 - Profile Management: Users can create and update their profile with resume and personal details.
