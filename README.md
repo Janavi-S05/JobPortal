@@ -6,7 +6,7 @@ A dynamic job portal application built with modern technologies to help users se
 - Backend: Node.js (with Express) 
 - Authentication: Clerk 
 - Deployment: Vercel
-- Error Tracking: Sentry
+- Error Tracking: Sentry 
 - Image Management: Cloudinary 
 
 # Features 
