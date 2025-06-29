@@ -1,4 +1,4 @@
-const { Webhook } = require("svix");
+const { Webhook } = require("svix"); // library Clerk uses to verify webhook requests
 const User = require("../models/User.js");
 
 const clerkWebhooks = async (req, res) => {
@@ -8,7 +8,7 @@ const clerkWebhooks = async (req, res) => {
 
     try {
         // Verify the webhook's signature
-        const webhook = new Webhook(process.env.CLERK_WEBHOOK_SECRET); // Ensure you have this secret in your .env file
+        const webhook = new Webhook(process.env.CLERK_WEBHOOK_SECRET); // secret token used to verify that the webhook is genuinely from Clerk.
         webhook.verify(JSON.stringify(req.body), req.headers); // Verifying signature and body
 
         const { data, type } = req.body;
@@ -23,6 +23,8 @@ const clerkWebhooks = async (req, res) => {
 
         switch (type) {
             case 'user.created': {
+
+                // When a new user signs up using Clerk: Create a new user in MongoDB with their Clerk id, name, email, image
                 const userData = {
                     _id: data.id,
                     email: data.email_addresses[0].email_address,
@@ -40,6 +42,7 @@ const clerkWebhooks = async (req, res) => {
             }
 
             case 'user.updated': {
+                // When user changes profile details in Clerk, this updates the user in your MongoDB.
                 const userData = {
                     email: data.email_addresses[0].email_address,
                     name: `${data.first_name} ${data.last_name}`,
@@ -53,6 +56,7 @@ const clerkWebhooks = async (req, res) => {
             }
 
             case 'user.deleted': {
+                // When the user account is deleted in Clerk, it deletes the user from your DB too.
                 console.log("Deleting user with ID:", data.id);
                 await User.findByIdAndDelete(data.id);
                 res.json({ success: true, message: "User deleted successfully" });

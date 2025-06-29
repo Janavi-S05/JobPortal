@@ -1,5 +1,5 @@
 const express = require("express")
-const { getUserData, applyForJob, getUserJobApplications, updateResume } = require("../controllers/userController")
+const { getUserData, applyForJob, getUserJobApplications, updateResume, matchJobsForUser } = require("../controllers/userController")
 const upload = require("../config/multer")
 
 const router = express.Router()
@@ -15,5 +15,7 @@ router.get('/applications',getUserJobApplications)
 
 // Update user profile
 router.post('/update-resume',upload.single('resume'),updateResume)
+
+router.get('/match-jobs', matchJobsForUser)
 
 module.exports=router

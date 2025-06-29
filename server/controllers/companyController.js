@@ -5,7 +5,6 @@ const generateToken = require("../utils/generateToken");
 const Job = require("../models/Job.js");
 const JobApplication = require("../models/JobApplication.js");
 
-
 // Register a new company
 const registerCompany = async (req, res) => {
     const { name, email, password } = req.body;

@@ -82,7 +82,9 @@ const AddJob = () => {
 
                 <div>
                     <p className='mb-2'>Job Location</p>
-                    <select className='w-full px-3 py-2 border-2 border-gray-300 rounded' onChange={e => setLocation(e.target.value)}>
+                    <select className='w-full px-3 py-2 border-2 border-gray-300 rounded'  
+                            value={location} 
+                            onChange={e => setLocation(e.target.value)}>
                         {JobLocations.map((location, index) => (
                             <option key={index} value={location}>{location}</option>
                         ))}

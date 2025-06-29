@@ -2,12 +2,19 @@ import React from 'react'
 import { assets } from '../assets/assets'
 import { useNavigate } from 'react-router-dom'
 
-const JobCard = ({ job }) => {
+const JobCard = ({ job, matchScore }) => {
   const navigate = useNavigate()
   return (
     <div className='border p-6 shadow rounded'>
         <div className='flex justify-between items-center'> 
-            <img className='h-8' src={job.companyId.image} alt="" />
+            {job.companyId && job.companyId.image && (
+                <img className='h-8' src={job.companyId.image} alt="" />
+            )}
+            {typeof matchScore === 'number' && (
+                <span className='bg-green-100 text-green-700 px-2 py-1 rounded text-xs font-semibold'>
+                    Match: {matchScore}%
+                </span>
+            )}
         </div>
         <h4 className='font-medium text-xl mt-2'>{job.title}</h4>
         <div className='flex items-center gap-3 mt-2 text-xs'>

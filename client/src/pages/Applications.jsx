@@ -82,7 +82,11 @@ const Applications = () => {
                 </>
               ) : (
                 <div className='flex gap-2'>
-                  <a target='_blank' href={userData.resume} className="bg-teal-100 text-teal-600 px-4 py-2 rounded-lg">
+                  <a
+                    target='_blank'
+                    href={userData && userData.resume ? userData.resume : "#"}
+                    className="bg-teal-100 text-teal-600 px-4 py-2 rounded-lg"
+                  >
                     Resume
                   </a>
                   <button onClick={() => setIsEdit(true)} className='text-gray-500 border border-gray-300 rounded-lg px-4 py-2'>
@@ -107,8 +111,9 @@ const Applications = () => {
             {userApplications.map((job, index) => (
               <tr key={job._id || index} className="border-b border-gray-300">
                 <td className='py-4 px-4 flex items-center gap-2'>
-                  <img className='w-8 h-8' src={job.companyId.image} alt="Company Logo" />
-                  {job.companyId.name}
+                  {job.companyId && job.companyId.image && (
+                    <img className='w-8 h-8' src={job.companyId.image} alt="Company Logo" />
+                  )}
                 </td>
                 <td className='py-4 px-4'>{job.jobId.title}</td>
                 <td className='py-4 px-4 hidden sm:table-cell'>{job.jobId.location}</td>

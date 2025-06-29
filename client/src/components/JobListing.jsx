@@ -3,15 +3,21 @@ import { AppContext } from '../context/AppContext'
 import { assets, JobCategories, JobLocations } from '../assets/assets'
 import JobCard from './JobCard'
 import { useEffect } from 'react'
+import { useAuth } from '@clerk/clerk-react'
+import axios from 'axios'
 
 const JobListing = () => {
 
-    const { isSearched, searchFilter, setSearchFilter, jobs } = useContext(AppContext)
+    const { isSearched, searchFilter, setSearchFilter, jobs, backendUrl } = useContext(AppContext)
     const [showFilter, setShowFilter] = useState(false)
     const [currPage, setCurrPage] = useState(1)
     const [selectedCategories, setSelectedCategories] = useState([])
     const [selectedLocations, setSelectedLocations] = useState([])
     const [filteredJobs, setFilteredJobs] = useState(jobs)
+
+    const { getToken } = useAuth()
+    const [matchScores, setMatchScores] = useState({})
+
 
     const handleCategoryChange = (category) => {
         setSelectedCategories(
@@ -24,6 +30,32 @@ const JobListing = () => {
             prev => prev.includes(location) ? prev.filter(c => c !== location) : [...prev, location]
         )
     }
+
+    useEffect(() => {
+        const fetchMatchScores = async () => {
+            try {
+                const token = await getToken()
+                if (!token) return
+                const { data } = await axios.get(backendUrl + 'api/users/match-jobs', {
+                    headers: { Authorization: `Bearer ${token}` }
+                })
+                if (data.success) {
+                    // Map jobId to score for easy lookup
+                    const scores = {}
+                    data.matches.forEach(match => {
+                        scores[match.job._id] = match.score
+                    })
+                    setMatchScores(scores)
+                }else{
+                     setMatchScores({});
+                }
+            } catch (error) {
+                // Optionally handle error
+                setMatchScores({});
+            }
+        }
+        fetchMatchScores()
+    }, [backendUrl, getToken])
 
     useEffect(() => {
         const matchesCategory = job => selectedCategories.length === 0 || selectedCategories.includes(job.category)
@@ -119,7 +151,7 @@ const JobListing = () => {
                 <div className='grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4'>
                     {
                         filteredJobs.slice((currPage - 1) * 6, currPage * 6).map((job, index) => (
-                            <JobCard key={index} job={job} />
+                            <JobCard key={index} job={job} matchScore={matchScores[job._id]}/>
                         ))
                     }
                 </div>
@@ -140,6 +172,7 @@ const JobListing = () => {
                         </a>
                     </div>
                 )}
+
             </section>
             
         </div>

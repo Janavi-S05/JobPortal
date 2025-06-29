@@ -3,7 +3,7 @@ import { assets } from '../assets/assets'
 import { AppContext } from '../context/AppContext'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
-import {toast} from 'react-toastify'
+import { toast } from 'react-toastify'
 
 const RecruiterLogin = () => {
 
@@ -19,9 +19,18 @@ const RecruiterLogin = () => {
   const { setShowRecruiterLogin, backendUrl, setCompanyToken, setCompanyData } = useContext(AppContext)
 
   const onSubmitHandler = async (e) => {
+    /* Stops the page from refreshing
+    State is not lost only if you: 
+    1. Store in localStorage / sessionStorage
+    2. Use cookies or database
+    3. Persist Redux state to browser storage
+    These survive a reload because they are outside of RAM.
+    */
     e.preventDefault()
+
+    // When they click “Next” (form submitted) the below condition is checked
     if (state == 'Sign Up' && !isTextDataSubmitted) {
-       return setIsTextDataSubmitted(true)
+      return setIsTextDataSubmitted(true)
     }
 
     try {
@@ -38,28 +47,39 @@ const RecruiterLogin = () => {
           setShowRecruiterLogin(false)
           navigate('/dashboard')
         }
-        else{
+        else {
           toast.error(data.message)
         }
       }
-      else{
+      else {
+
+        // Sends form data to /register endpoint (multipart/form-data)
         const formData = new FormData()
-        formData.append('name',name)
-        formData.append('password',password)
-        formData.append('email',email)
-        formData.append('image',image)
+        formData.append('name', name)
+        formData.append('password', password)
+        formData.append('email', email)
+        formData.append('image', image)
 
-        const {data} = await axios.post(backendUrl+'api/company/register',formData)
+        const { data } = await axios.post(backendUrl + 'api/company/register', formData)
 
-        if(data.success){
+        if (data.success) {
           console.log(data);
+          
+          // store the logged-in company’s profile information (like name, email, logo, etc.) in a shared global state
+          // localStorage is not used in this case because react components do not automatically re-render when changed
+          
           setCompanyData(data.company)
           setCompanyToken(data.token)
+          
+          /* Company data and token are stored in localStorage the user stays logged in even after refreshing the page.
+          Token is saved in the browser’s localStorage
+          Not stored in react state because it rests everytime the user reloads or closes the page, cannot acess outside React like axios interceptors whereas localStorage.getItem() is useful
+          */
           localStorage.setItem('companyToken', data.token)
           setShowRecruiterLogin(false)
           navigate('/dashboard')
         }
-        else{
+        else {
           toast.error(data.message)
         }
       }
@@ -70,11 +90,12 @@ const RecruiterLogin = () => {
   }
 
   useEffect(() => {
+    // disable page scrolling while the Recruiter login modal is open.
     document.body.style.overflow = 'hidden' // mounting when the recuriterLogin is set to true
     return () => {
       document.body.style.overflow = 'unset' // unmounting when the recuriterLogin is set to false
     }
-  }, [])
+  }, []) // Empty array means it runs once, only on mount/unmount
 
 
   return (
@@ -135,6 +156,7 @@ const RecruiterLogin = () => {
         {
           state === 'Login' && <p className="text-sm text-blue-600 mt-4 cursor-pointer">Forgot password?</p>
         }
+
         <button type='submit' className='bg-blue-600 w-full text-white mt-5 py-2 rounded-full mt-4'>
           {
             state === 'Login' ?
